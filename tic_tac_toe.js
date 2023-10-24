@@ -1,10 +1,5 @@
 let tempx=[0,0,0,0,0,0,0,0,0,0,0,0,0],tempo=[0,0,0,0,0,0,0,0,0,0,0,0,0]
-/*
-4 2 12
-4 0 11
-4 6 9
-4 8 10
-*/
+let stack=[];
 function check(c)
 {
     let result=0;
@@ -25,10 +20,11 @@ function call(e,number)
 {
     if (!tempx[number-1] && !tempo[number-1])
     {
-        e.innerHTML=(c%2)?'<i class="fa-solid fa-x display-1 "></i>':'<i class="fa-solid fa-o display-1 "></i>';
-        (c%2)?tempx[number-1]=1:tempo[number-1]=1;
+        e.innerHTML=(c)?'<i class="fa-solid fa-x display-1 "></i>':'<i class="fa-solid fa-o display-1 "></i>';
+        (c)?tempx[number-1]=1:tempo[number-1]=1;
         let hold=check(c); 
-        c++;
+        stack.push([e,number-1]);
+        c=!c;
         if (hold!='Z') 
         {
             document.getElementById('Winner').innerHTML=`${hold} is the Winner`;
@@ -44,5 +40,18 @@ function call(e,number)
                 location.reload();
             }, 1500);
         }
+    }
+}
+
+function undo()
+{
+    if (stack.length!=0)
+    {
+        let temp=stack.pop();
+        console.log(temp[0],temp[1]);
+        if (!c) tempx[temp[1]]=0;
+        else tempo[temp[1]]=0;
+        temp[0].innerHTML='<i class="fa-solid fa-blank display-2 p-5"></i>';
+        c=!c;
     }
 }
